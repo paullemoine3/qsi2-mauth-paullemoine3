@@ -2,8 +2,7 @@ const bcrypt = require('bcrypt'); // https://github.com/kelektiv/node.bcrypt.js
 
 module.exports = (sequelize, DataTypes) => {
   const Users = sequelize.define(
-    'Users',
-    {
+    'Users', {
       id: {
         // Avoid usage of auto-increment numbers, UUID is a better choice
         type: DataTypes.UUID,
@@ -53,16 +52,13 @@ module.exports = (sequelize, DataTypes) => {
           this.setDataValue('hash', hash);
         }
       }
-    },
-    {
+    }, {
       // logical delete over physical delete
       paranoid: true,
-      indexes: [
-        {
-          unique: true,
-          fields: ['email']
-        }
-      ]
+      indexes: [{
+        unique: true,
+        fields: ['email']
+      }]
     }
   );
 
@@ -71,7 +67,7 @@ module.exports = (sequelize, DataTypes) => {
 
   // anonymous function mandatody to access this in instance method
   /* eslint func-names:off */
-  Users.prototype.comparePassword = function(password) {
+  Users.prototype.comparePassword = function (password) {
     return new Promise((resolve, reject) => {
       bcrypt.compare(password, this.hash, (err, res) => {
         if (err || !res) {

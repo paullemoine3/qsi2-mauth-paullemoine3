@@ -10,18 +10,18 @@ const {
 
 // Create our strategy
 const jwtStrategy = opts =>
-    new Strategy(opts, (jwtPayload, done) =>
+    new Strategy(opts, (jwtPayload, done) => {
         getUser(jwtPayload)
-        .then(user => {
-            if (user) {
-                done(null, user);
-            } else {
-                done(null, false);
-            }
-            return null;
-        })
-        .catch(err => done(err, false))
-    );
+            .then(user => {
+                if (user) {
+                    done(null, user);
+                } else {
+                    done(null, false);
+                }
+                return null;
+            })
+            .catch(err => done(err, false))
+    });
 
 // Init passport with our jwt strategy
 const initAuth = () => {

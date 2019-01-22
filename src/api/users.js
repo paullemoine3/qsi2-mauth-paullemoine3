@@ -2,7 +2,9 @@ const express = require('express');
 const jwt = require('jwt-simple');
 const {
   createUser,
-  loginUser
+  loginUser,
+  getUser,
+  updateUser
 } = require('../controller/users');
 const logger = require('../logger');
 
@@ -94,13 +96,48 @@ apiUsers.post('/login', (req, res) =>
 );
 
 const apiUsersProtected = express.Router();
-apiUsersProtected.get('/', (req, res) =>
-  res.status(200).send({
-    success: true,
-    profile: req.user,
-    message: 'user logged in'
-  })
-);
+// apiUsersProtected.get('/', (req, res) =>
+//   res.status(200).send({
+//     success: true,
+//     profile: req.user,
+//     message: 'user logged in'
+//   })
+// );
+
+apiUsersProtected.put('/', (req, res) => {
+  if (req.token) {
+    res.send(200).send({})
+  } else {
+    res.send()
+  }
+});
+
+apiUsersProtected.get('/', (req, res) => {
+  var id = req.param('id');
+  logger.info(id);
+  getUser({
+      id
+    })
+    .then(user => {
+      return res.status(200).send({
+        success: true,
+        profile: user,
+        message: 'info user logged in'
+      });
+    })
+});
+
+apiUsersProtected.put('/', (req, res) => {
+  logger.info(id);
+  updateUser(req.body)
+    .then(user => {
+      return res.status(200).send({
+        success: true,
+        profile: user,
+        message: 'info update user logged in'
+      });
+    })
+});
 
 module.exports = {
   apiUsers,

@@ -434,6 +434,6 @@ npm audit
 - Git push your application. [Read the doc](https://www.clever-cloud.com/doc/nodejs/nodejs/)
 - Think to stop the app when you're not using it
 
-5. Enforce SSL when you test API on remote server 
+5. Enforce SSL when you test API on remote server
 
-You should use the [express-sslify](https://www.npmjs.com/package/express-sslify) npm lib 
+You should use the [express-sslify](https://www.npmjs.com/package/express-sslify) npm lib
