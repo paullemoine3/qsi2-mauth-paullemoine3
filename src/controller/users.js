@@ -65,16 +65,15 @@ const getUser = ({
   );
 
 const updateUser = ({
-  mail,
-  pass,
+  email,
+  password,
   firstname,
   lastname,
   id
 }) => {
-  logger.info(mail);
   Users.update({
-    email: mail,
-    password: pass,
+    email: email,
+    hash: password,
     firstName: firstname,
     lastName: lastname,
     updatedAt: new Date()
@@ -82,20 +81,25 @@ const updateUser = ({
     where: {
       id
     },
-  }).then(user =>
-    user ?
-    omit(
-      user.get({
-        plain: true
-      }),
-      Users.excludeAttributes
-    ) :
-    Promise.reject(new Error('GET USER: UNKOWN OR DELETED USER')));
+  })
+}
+
+const deleteUser = ({
+  id
+}) => {
+  Users.update({
+    deletedAt: new Date()
+  }, {
+    where: {
+      id
+    },
+  })
 }
 
 module.exports = {
   createUser,
   getUser,
   loginUser,
-  updateUser
+  updateUser,
+  deleteUser
 };

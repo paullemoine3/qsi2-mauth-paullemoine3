@@ -4,7 +4,8 @@ const {
   createUser,
   loginUser,
   getUser,
-  updateUser
+  updateUser,
+  deleteUser
 } = require('../controller/users');
 const logger = require('../logger');
 
@@ -104,14 +105,6 @@ const apiUsersProtected = express.Router();
 //   })
 // );
 
-apiUsersProtected.put('/', (req, res) => {
-  if (req.token) {
-    res.send(200).send({})
-  } else {
-    res.send()
-  }
-});
-
 apiUsersProtected.get('/', (req, res) => {
   var id = req.param('id');
   logger.info(id);
@@ -128,13 +121,35 @@ apiUsersProtected.get('/', (req, res) => {
 });
 
 apiUsersProtected.put('/', (req, res) => {
-  logger.info(id);
-  updateUser(req.body)
-    .then(user => {
+  updateUser(req.body.user)
+    .then(() => {
       return res.status(200).send({
         success: true,
-        profile: user,
         message: 'info update user logged in'
+      });
+    })
+    .catch(err => {
+      logger.error(`💥 Failed to update user : ${err.stack}`);
+      return res.status(500).send({
+        success: false,
+        message: `${err.name} : ${err.message}`
+      });
+    })
+});
+
+apiUsersProtected.delete('/', (req, res) => {
+  deleteUser(req.body.user)
+    .then(() => {
+      return res.status(200).send({
+        success: true,
+        message: 'info ok delete user logged'
+      });
+    })
+    .catch(err => {
+      logger.error(`💥 Failed to update user : ${err.stack}`);
+      return res.status(500).send({
+        success: false,
+        message: `${err.name} : ${err.message}`
       });
     })
 });
