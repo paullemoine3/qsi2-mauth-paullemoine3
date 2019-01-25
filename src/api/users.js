@@ -97,13 +97,7 @@ apiUsers.post('/login', (req, res) =>
 );
 
 const apiUsersProtected = express.Router();
-// apiUsersProtected.get('/', (req, res) =>
-//   res.status(200).send({
-//     success: true,
-//     profile: req.user,
-//     message: 'user logged in'
-//   })
-// );
+
 
 apiUsersProtected.get('/', (req, res) => {
   var id = req.param('id');
