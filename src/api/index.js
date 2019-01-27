@@ -11,8 +11,17 @@ const {
     isAuthenticated,
     initAuth
 } = require('../controller/auth');
+
+var hpp = require('hpp');
+
+var helmet = require('helmet');
 // create an express Application for our api
 const api = express();
+//adding hpp to api
+api.use(hpp());
+
+//adding helmet to api
+api.use(helmet());
 initAuth();
 
 // apply a middelware to parse application/json body
