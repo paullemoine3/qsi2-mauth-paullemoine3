@@ -1,8 +1,12 @@
 const express = require('express');
 const {
     apiUsers,
-    apiUsersProtected
+    apiUsersProtected,
 } = require('./users');
+const {
+    apiGroups,
+    apiGroupsProtected
+} = require('./groups');
 const {
     isAuthenticated,
     initAuth
@@ -26,9 +30,11 @@ apiRoutes
     )
     // connect api users router
     .use('/users', apiUsers)
+    .use('/groups', apiGroups)
     // api bellow this middelware require Authorization
     .use(isAuthenticated)
     .use('/users', apiUsersProtected)
+    .use('/groups', apiGroupsProtected)
     .use((err, req, res, next) => {
         res.status(403).send({
             success: false,

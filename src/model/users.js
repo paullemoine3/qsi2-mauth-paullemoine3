@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt'); // https://github.com/kelektiv/node.bcrypt.js
+const Groups = require('./groups');
 
 module.exports = (sequelize, DataTypes) => {
   const Users = sequelize.define(
@@ -75,6 +76,15 @@ module.exports = (sequelize, DataTypes) => {
         }
         return resolve();
       });
+    });
+  };
+
+  Users.associate = models => {
+    Users.belongsToMany(models.Groups, {
+      through: 'groupUser'
+    });
+    Users.hasOne(models.Groups, {
+      as: 'owner'
     });
   };
 

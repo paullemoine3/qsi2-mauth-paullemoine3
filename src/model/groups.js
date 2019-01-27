@@ -14,31 +14,30 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 comment: "Groups title",
                 set(val) {
-                    this.setDataValue('title', val.toUpperCase());
+                    this.setDataValue('title', val);
                 }
             },
             description: {
                 type: DataTypes.STRING,
                 comment: "Groups description",
                 set(val) {
-                    this.setDataValue('description', val.toUpperCase());
+                    this.setDataValue('description', val);
                 }
             },
             metadatas: {
                 type: DataTypes.JSON,
                 comment: "Groups metadatas",
                 set(val) {
-                    this.setDataValue('metadatas', val.toUpperCase());
+                    this.setDataValue('metadatas', val);
                 }
-            }
+            },
         }
     );
+    Groups.associate = models => {
+        Groups.belongsToMany(models.Users, {
+            through: 'groupUser'
+        });
+    };
 
-    Groups.hasOne(Users, {
-        as: 'owner'
-    });
-    Groups.hasMany(Users, {
-        as: 'members'
-    })
     return Groups;
 };

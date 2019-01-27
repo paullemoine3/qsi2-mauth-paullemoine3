@@ -1,4 +1,5 @@
-const omit = require('lodash.omit');
+const pick = require('lodash.omit');
+const logger = require('../logger');
 
 const {
     Groups
@@ -7,54 +8,51 @@ const {
 const createGroups = ({
         title,
         description,
-        metadatas
+        metadatas,
+        id
     }) =>
-    Groups.findOrCreate({
-        email,
+    Groups.create({
         title: title,
         description: description || '',
-        metadatas: metadatas
+        metadatas: metadatas,
+        ownerId: id
     }).then(group =>
         pick(
             group.get({
                 plain: true
-            }),
-            Groups.excludeAttributes
+            })
         )
     );
 
 const getAllGroups = () =>
-    Groups.findAll({
-        where: {
-            id
-        }
-    }).then(groups =>
+    Groups.findAll().then(groups =>
         groups && !groups.deletedAt ?
-        omit(
-            groups.get({
-                plain: true
-            }),
-            Groups.excludeAttributes
-        ) :
+        groups :
         Promise.reject(new Error('No groups created.'))
     );
 
-const getOneGroups = ({
-        id
+const joinGroups = ({
+        idGroup,
+        idUser
     }) =>
     Groups.findOne({
         where: {
-            id
+            id: idGroup
         }
     }).then(groups =>
-        groups && !groups.deletedAt ?
-        omit(
-            groups.get({
-                plain: true
-            }),
-            Groups.excludeAttributes
-        ) :
-        Promise.reject(new Error('Unknown or deleted group.'))
+        groups.addUsers(idUser)
+    );
+
+const dismissGroups = ({
+        idGroup,
+        idUser
+    }) =>
+    Groups.findOne({
+        where: {
+            id: idGroup
+        }
+    }).then(groups =>
+        groups.removeUsers(idUser)
     );
 
 const updateGroups = ({
@@ -90,7 +88,8 @@ const deleteGroups = ({
 module.exports = {
     createGroups,
     getAllGroups,
-    getOneGroups,
     updateGroups,
-    deleteGroups
+    deleteGroups,
+    joinGroups,
+    dismissGroups
 };
