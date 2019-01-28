@@ -12,9 +12,11 @@ const {
     initAuth
 } = require('../controller/auth');
 
+//import security
 var hpp = require('hpp');
-
 var helmet = require('helmet');
+var enforce = require('express-sslify');
+
 // create an express Application for our api
 const api = express();
 //adding hpp to api
@@ -22,6 +24,9 @@ api.use(hpp());
 
 //adding helmet to api
 api.use(helmet());
+
+//adding ssl
+api.use(enforce.HTTPS());
 initAuth();
 
 // apply a middelware to parse application/json body

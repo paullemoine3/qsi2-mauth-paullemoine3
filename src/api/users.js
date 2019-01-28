@@ -37,7 +37,7 @@ apiUsers.post('/', (req, res) =>
   createUser(req.body)
   .then(user => {
     const token = jwt.encode({
-      id: user.id
+      id: user[0].id
     }, process.env.JWT_SECRET);
     return res.status(201).send({
       success: true,
