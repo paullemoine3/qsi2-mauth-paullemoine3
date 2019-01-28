@@ -26,7 +26,9 @@ api.use(hpp());
 api.use(helmet());
 
 //adding ssl
-api.use(enforce.HTTPS());
+api.use(enforce.HTTPS({
+    trustProtoHeader: true
+}));
 initAuth();
 
 // apply a middelware to parse application/json body
