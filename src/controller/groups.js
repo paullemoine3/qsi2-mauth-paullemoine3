@@ -1,5 +1,4 @@
 const pick = require('lodash.omit');
-const logger = require('../logger');
 
 const {
     Groups
@@ -40,7 +39,9 @@ const joinGroups = ({
             id: idGroup
         }
     }).then(groups =>
-        groups.addUsers(idUser)
+        groups && !groups.deletedAt ?
+        groups.addUsers(idUser) :
+        Promise.reject(new Error('Group don\'t exist.'))
     );
 
 const dismissGroups = ({
