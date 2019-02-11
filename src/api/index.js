@@ -16,6 +16,12 @@ const {
 var hpp = require('hpp');
 var helmet = require('helmet');
 var enforce = require('express-sslify');
+var cors = require('cors')
+
+var corsOptions = {
+    origin: process.env.URL_CORS,
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
 
 // create an express Application for our api
 const api = express();
@@ -24,6 +30,7 @@ api.use(hpp());
 
 //adding helmet to api
 api.use(helmet());
+api.use(cors(corsOptions))
 
 //adding ssl
 api.use(enforce.HTTPS({
